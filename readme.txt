@@ -1,0 +1,1 @@
+Run pip3 install "sanic[test]" to install test dependencies of Sanic.

@@ -4,7 +4,7 @@ from sanic_jwt import Initialize, exceptions, protected
 import logging
 from utils import normalize_json
 
-app = Sanic("Hire me")
+app = Sanic("hire_me")
 
 
 class User:
@@ -26,6 +26,7 @@ users = {"user1": User(1, "user1", "secret")}
 async def authenticate(request, *args, **kwargs):
     username = request.json.get("username", None)
     password = request.json.get("password", None)
+    logging.info(f"Auth: username: {username}, password: {password}")
 
     if not username or not password:
         logging.exception("Either username or password not supplied in request")
@@ -46,7 +47,9 @@ async def authenticate(request, *args, **kwargs):
 @app.route("/api/normalize", methods=["POST"])
 @protected()
 async def test(request):
-    return dict(ChainMap(*normalize_json(request.json).__reversed__()))
+    if not request.json:
+        raise exceptions.InvalidPayload("No json to normalize")
+    return normalize_json(request.json)
 
 
 if __name__ == '__main__':
