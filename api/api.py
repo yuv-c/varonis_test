@@ -46,7 +46,7 @@ async def authenticate(request, *args, **kwargs):
 
 @app.route("/api/normalize", methods=["POST"])
 @protected()
-async def test(request):
+async def normalize(request):
     if not request.json:
         raise exceptions.InvalidPayload("No json to normalize")
     return normalize_json(request.json)
